@@ -17,7 +17,6 @@ export const metadata: Metadata = {
   description: "Streamline your business with our comprehensive invoice management platform. Create, track, and manage invoices efficiently.",
   keywords: "invoice management, billing, accounting, business tools, invoice tracking",
   authors: [{ name: "HALO-Foundation" }],
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
 };
 

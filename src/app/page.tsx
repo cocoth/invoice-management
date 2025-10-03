@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { FileText, Download, Shield, Code } from "lucide-react"
-import Navbar from "@/components/custom/navbar"
+import Navbar from "@/components/custom/navigation/navbar"
 
 export default function HomePage() {
   return (
@@ -23,8 +23,14 @@ export default function HomePage() {
             no database required, completely free.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/invoice">
-              <Button size="lg" className="w-full sm:w-auto">
+            <Link
+              href="/invoice"
+              className="group"
+            >
+              <Button
+                size="lg"
+                className="w-full sm:w-auto cursor-pointer transition-all duration-700 group-hover:scale-105"
+              >
                 <FileText className="mr-2 h-5 w-5" />
                 Create Invoice Now
               </Button>
@@ -130,7 +136,10 @@ export default function HomePage() {
             Start creating professional invoices in seconds. No signup required.
           </p>
           <Link href="/invoice">
-            <Button size="lg">
+            <Button
+              size="lg"
+              className="cursor-pointer transition-all duration-700 hover:scale-105"
+            >
               <FileText className="mr-2 h-5 w-5" />
               Get Started Now
             </Button>
