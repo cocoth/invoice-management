@@ -1,0 +1,189 @@
+"use client"
+
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { ArrowLeft, Download } from "lucide-react"
+import { useState } from "react"
+import { generateInvoicePDF } from "@/lib/pdfGenerator"
+
+interface InvoiceItem {
+  id: string
+  description: string
+  quantity: number
+  rate: number
+}
+
+interface InvoiceData {
+  invoiceNumber: string
+  invoiceDate: string
+  dueDate: string
+  fromName: string
+  fromEmail: string
+  fromPhone: string
+  fromAddress: string
+  toName: string
+  toEmail: string
+  toPhone: string
+  toAddress: string
+  items: InvoiceItem[]
+  notes: string
+  bankName: string
+  accountNumber: string
+  accountName: string
+}
+
+interface InvoicePreviewProps {
+  data: InvoiceData
+  onBack: () => void
+}
+
+export default function InvoicePreview({ data, onBack }: InvoicePreviewProps) {
+  const [isGenerating, setIsGenerating] = useState(false)
+
+  const calculateSubtotal = () => {
+    return data.items.reduce((sum, item) => sum + item.quantity * item.rate, 0)
+  }
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString("id-ID", { year: "numeric", month: "long", day: "numeric" })
+  }
+
+  const handleExportPDF = async () => {
+    setIsGenerating(true)
+    try {
+      await generateInvoicePDF(data, calculateSubtotal())
+    } catch (error) {
+      console.error("Error generating PDF:", error)
+      alert("Failed to generate PDF. Please try again.")
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <Button onClick={onBack} variant="ghost" size="sm">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Edit
+            </Button>
+            <Button onClick={handleExportPDF} disabled={isGenerating}>
+              <Download className="mr-2 h-4 w-4" />
+              {isGenerating ? "Generating PDF..." : "Export to PDF"}
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Invoice Preview */}
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <Card className="p-8 md:p-12 bg-white text-black" id="invoice-content">
+          {/* Header */}
+          <div className="flex justify-between items-start mb-8">
+            <div>
+              <h1 className="text-3xl font-bold mb-2 text-black">INVOICE</h1>
+              <p className="text-gray-600">#{data.invoiceNumber}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-gray-600">Invoice Date</p>
+              <p className="font-medium text-black">{formatDate(data.invoiceDate)}</p>
+              <p className="text-sm text-gray-600 mt-2">Due Date</p>
+              <p className="font-medium text-black">{formatDate(data.dueDate)}</p>
+            </div>
+          </div>
+
+          {/* From and To */}
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            <div>
+              <h3 className="text-sm font-semibold text-gray-600 mb-2">FROM</h3>
+              <div className="space-y-1">
+                <p className="font-semibold text-black">{data.fromName}</p>
+                <p className="text-sm text-gray-700">{data.fromEmail}</p>
+                <p className="text-sm text-gray-700">{data.fromPhone}</p>
+                <p className="text-sm text-gray-700">{data.fromAddress}</p>
+              </div>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-gray-600 mb-2">BILL TO</h3>
+              <div className="space-y-1">
+                <p className="font-semibold text-black">{data.toName}</p>
+                <p className="text-sm text-gray-700">{data.toEmail}</p>
+                <p className="text-sm text-gray-700">{data.toPhone}</p>
+                <p className="text-sm text-gray-700">{data.toAddress}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Items Table */}
+          <div className="mb-8">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b-2 border-gray-300">
+                  <th className="text-left py-3 font-semibold text-black">Description</th>
+                  <th className="text-right py-3 font-semibold text-black">Qty</th>
+                  <th className="text-right py-3 font-semibold text-black">Rate</th>
+                  <th className="text-right py-3 font-semibold text-black">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.items.map((item) => (
+                  <tr key={item.id} className="border-b border-gray-200">
+                    <td className="py-3 text-gray-800">{item.description}</td>
+                    <td className="text-right py-3 text-gray-800">{item.quantity}</td>
+                    <td className="text-right py-3 text-gray-800">IDR {item.rate.toLocaleString("id-ID")}</td>
+                    <td className="text-right py-3 text-gray-800">
+                      IDR {(item.quantity * item.rate).toLocaleString("id-ID")}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Total */}
+          <div className="flex justify-end mb-8">
+            <div className="w-64">
+              <div className="flex justify-between py-2 border-t-2 border-gray-300">
+                <span className="font-bold text-lg text-black">TOTAL</span>
+                <span className="font-bold text-lg text-black">IDR {calculateSubtotal().toLocaleString("id-ID")}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Payment Details */}
+          {data.bankName && (
+            <div className="mb-8 p-4 bg-gray-100 rounded-lg">
+              <h3 className="font-semibold mb-2 text-black">Payment Details</h3>
+              <div className="grid grid-cols-3 gap-4 text-sm">
+                <div>
+                  <p className="text-gray-600">Bank Name</p>
+                  <p className="font-medium text-black">{data.bankName}</p>
+                </div>
+                <div>
+                  <p className="text-gray-600">Account Number</p>
+                  <p className="font-medium text-black">{data.accountNumber}</p>
+                </div>
+                <div>
+                  <p className="text-gray-600">Account Name</p>
+                  <p className="font-medium text-black">{data.accountName}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Notes */}
+          {data.notes && (
+            <div className="border-t border-gray-300 pt-6">
+              <h3 className="font-semibold mb-2 text-black">Notes</h3>
+              <p className="text-sm text-gray-700 whitespace-pre-wrap">{data.notes}</p>
+            </div>
+          )}
+        </Card>
+      </div>
+    </div>
+  )
+}
