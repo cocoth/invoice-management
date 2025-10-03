@@ -7,7 +7,7 @@ import Navbar from "@/components/custom/navbar"
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
-      <Navbar/>
+      <Navbar />
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 md:py-32">
         <div className="max-w-4xl mx-auto text-center">
@@ -29,10 +29,14 @@ export default function HomePage() {
                 Create Invoice Now
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent">
+            {/* <Button
+              size="lg"
+              variant="outline"
+              className="w-full sm:w-auto bg-transparent"
+            >
               <Download className="mr-2 h-5 w-5" />
               View Sample
-            </Button>
+            </Button> */}
           </div>
         </div>
       </section>
