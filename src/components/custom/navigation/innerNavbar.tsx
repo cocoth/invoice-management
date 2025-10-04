@@ -27,7 +27,7 @@ export const InnerNavbar = ({
     }
 
     return (
-        <div className="border-b border-blue-900/10 dark:border-blue-400/30 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+        <div className="border-b border-blue-900/10 dark:border-blue-400/30 bg-white/40 dark:bg-gray-900/10 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
             <div className="container mx-auto px-4 py-4 h-20">
                 <div className="flex items-center justify-between h-full">
                     <Button
