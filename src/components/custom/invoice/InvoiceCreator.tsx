@@ -97,8 +97,8 @@ export default function InvoiceCreator() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+        <div className="container mx-auto px-4 py-4 h-20">
+          <div className="flex items-center justify-between h-full">
             <Link href="/" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-4 w-4" />
               Back to Home
@@ -123,7 +123,7 @@ export default function InvoiceCreator() {
           <Card className="p-6">
             <h2 className="text-xl font-semibold mb-4">Invoice Details</h2>
             <div className="grid md:grid-cols-3 gap-4">
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="invoiceNumber">Invoice Number</Label>
                 <Input
                   id="invoiceNumber"
@@ -132,7 +132,7 @@ export default function InvoiceCreator() {
                   placeholder="INV-001"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="invoiceDate">Invoice Date</Label>
                 <Input
                   id="invoiceDate"
@@ -141,7 +141,7 @@ export default function InvoiceCreator() {
                   onChange={(e) => setInvoiceData({ ...invoiceData, invoiceDate: e.target.value })}
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="dueDate">Due Date</Label>
                 <Input
                   id="dueDate"
@@ -157,7 +157,7 @@ export default function InvoiceCreator() {
           <Card className="p-6">
             <h2 className="text-xl font-semibold mb-4">From (Your Details)</h2>
             <div className="grid md:grid-cols-2 gap-4">
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="fromName">Your Name / Business Name</Label>
                 <Input
                   id="fromName"
@@ -166,7 +166,7 @@ export default function InvoiceCreator() {
                   placeholder="John Doe"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="fromEmail">Email</Label>
                 <Input
                   id="fromEmail"
@@ -176,7 +176,7 @@ export default function InvoiceCreator() {
                   placeholder="john@example.com"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="fromPhone">Phone</Label>
                 <Input
                   id="fromPhone"
@@ -185,7 +185,7 @@ export default function InvoiceCreator() {
                   placeholder="+62 812 3456 7890"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="fromAddress">Address</Label>
                 <Input
                   id="fromAddress"
@@ -201,7 +201,7 @@ export default function InvoiceCreator() {
           <Card className="p-6">
             <h2 className="text-xl font-semibold mb-4">Bill To (Client Details)</h2>
             <div className="grid md:grid-cols-2 gap-4">
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="toName">Client Name / Company</Label>
                 <Input
                   id="toName"
@@ -210,7 +210,7 @@ export default function InvoiceCreator() {
                   placeholder="Client Company"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="toEmail">Email</Label>
                 <Input
                   id="toEmail"
@@ -220,7 +220,7 @@ export default function InvoiceCreator() {
                   placeholder="client@example.com"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="toPhone">Phone</Label>
                 <Input
                   id="toPhone"
@@ -229,7 +229,7 @@ export default function InvoiceCreator() {
                   placeholder="+62 812 9876 5432"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="toAddress">Address</Label>
                 <Input
                   id="toAddress"
@@ -242,19 +242,15 @@ export default function InvoiceCreator() {
           </Card>
 
           {/* Items/Services */}
-          <Card className="p-6">
+          <Card className="p-6 max-h-[calc(100dvh-6rem)] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold">Services / Items</h2>
-              <Button onClick={addItem} variant="outline" size="sm">
-                <Plus className="mr-2 h-4 w-4" />
-                Add Item
-              </Button>
             </div>
             <div className="space-y-4">
               {invoiceData.items.map((item, index) => (
                 <div key={item.id} className="flex gap-4 items-start">
                   <div className="flex-1 grid md:grid-cols-[2fr,1fr,1fr,auto] gap-4 items-end">
-                    <div>
+                    <div className="space-y-2">
                       <Label htmlFor={`desc-${item.id}`}>Description</Label>
                       <Input
                         id={`desc-${item.id}`}
@@ -263,7 +259,7 @@ export default function InvoiceCreator() {
                         placeholder="Web Development Service"
                       />
                     </div>
-                    <div>
+                    <div className="space-y-2">
                       <Label htmlFor={`qty-${item.id}`}>Quantity</Label>
                       <Input
                         id={`qty-${item.id}`}
@@ -273,7 +269,7 @@ export default function InvoiceCreator() {
                         onChange={(e) => updateItem(item.id, "quantity", Number.parseInt(e.target.value) || 1)}
                       />
                     </div>
-                    <div>
+                    <div className="space-y-2">
                       <Label htmlFor={`rate-${item.id}`}>Rate (IDR)</Label>
                       <Input
                         id={`rate-${item.id}`}
@@ -318,13 +314,24 @@ export default function InvoiceCreator() {
                 </div>
               </div>
             </div>
+            <section className="flex w-full justify-end">
+              <Button
+                onClick={addItem}
+                variant="outline"
+                size="sm"
+                className="cursor-pointer"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add Item
+              </Button>
+            </section>
           </Card>
 
           {/* Payment Details */}
           <Card className="p-6">
             <h2 className="text-xl font-semibold mb-4">Payment Details</h2>
             <div className="grid md:grid-cols-3 gap-4">
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="bankName">Bank Name</Label>
                 <Input
                   id="bankName"
@@ -333,7 +340,7 @@ export default function InvoiceCreator() {
                   placeholder="Bank BCA"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="accountNumber">Account Number</Label>
                 <Input
                   id="accountNumber"
@@ -342,7 +349,7 @@ export default function InvoiceCreator() {
                   placeholder="1234567890"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="accountName">Account Name</Label>
                 <Input
                   id="accountName"
