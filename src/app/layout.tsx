@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../css/globals.css";
 import { ThemeProvider } from "@/providers/ThemeProvider";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,7 +57,7 @@ export default function RootLayout({
     "@type": "WebApplication",
     "name": "Invoic",
     "description": "Professional invoice management platform for tech professionals. Create, manage, and export invoices with no signup required.",
-    "url": "https://invoic.app",
+    "url": "https://invoic.vercel.app",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web Browser",
     "offers": {
@@ -96,6 +97,7 @@ export default function RootLayout({
           enableColorScheme
         >
           {children}
+          <Analytics/>
         </ThemeProvider>
       </body>
     </html>
