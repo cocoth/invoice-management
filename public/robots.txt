@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Allow: /invoice
+Allow: /invoice/preview
+Disallow:
