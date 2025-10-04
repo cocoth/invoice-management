@@ -56,7 +56,7 @@ export default function LandingPage() {
           </div>
 
           {/* Mobile only - ultra minimal effects */}
-          {/* <div className="md:hidden">
+          <div className="md:hidden">
             <motion.div 
               className="absolute top-1/5 left-1 size-56 bg-blue-500/15 dark:bg-blue-400/15 rounded-full blur-xl"
               initial={{ scale: 0, opacity: 0 }}
@@ -69,7 +69,7 @@ export default function LandingPage() {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 1.5, delay: 0.8 }}
             />
-          </div> */}
+          </div>
         </motion.div>
 
         <div className="relative max-w-6xl mx-auto">
