@@ -71,7 +71,7 @@ export default function InvoicePreview({ data, onBack }: InvoicePreviewProps) {
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Edit
             </Button>
-            <Button onClick={handleExportPDF} disabled={isGenerating}>
+            <Button onClick={handleExportPDF} disabled={isGenerating} className="cursor-pointer">
               <Download className="mr-2 h-4 w-4" />
               {isGenerating ? "Generating PDF..." : "Export to PDF"}
             </Button>

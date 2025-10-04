@@ -103,7 +103,7 @@ export default function InvoiceCreator() {
               <ArrowLeft className="h-4 w-4" />
               Back to Home
             </Link>
-            <Button onClick={handlePreview}>
+            <Button onClick={handlePreview} className="cursor-pointer">
               <Download className="mr-2 h-4 w-4" />
               Preview & Export
             </Button>
@@ -381,7 +381,7 @@ export default function InvoiceCreator() {
             <Link href="/">
               <Button variant="outline">Cancel</Button>
             </Link>
-            <Button onClick={handlePreview} size="lg">
+            <Button onClick={handlePreview} size="lg" className="cursor-pointer">
               <Download className="mr-2 h-4 w-4" />
               Preview & Export PDF
             </Button>
