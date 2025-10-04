@@ -81,6 +81,18 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
+        {/* <!-- Google tag (gtag.js) --> */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-XEQ711EPCB"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-XEQ711EPCB');
+            `
+          }}
+        />
         {/* <!-- Google Tag Manager --> */}
         <script
           dangerouslySetInnerHTML={{
@@ -102,11 +114,11 @@ export default function RootLayout({
       >
         {/* <!-- Google Tag Manager (noscript) --> */}
         <noscript>
-          <iframe 
-        src="https://www.googletagmanager.com/ns.html?id=GTM-NP8NQZSL"
-        height="0" 
-        width="0" 
-        style={{display: 'none', visibility: 'hidden'}}
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-NP8NQZSL"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
         {/* <!-- End Google Tag Manager (noscript) --> */}
