@@ -54,11 +54,62 @@ export async function generateInvoicePDF(data: InvoiceData, total: number) {
     return date.toLocaleDateString("id-ID", { year: "numeric", month: "long", day: "numeric" })
   }
 
+  // Helper function to format currency with better handling for large numbers
+  const formatCurrency = (amount: number) => {
+    // Format with proper Indonesian locale
+    const formatted = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount)
+    
+    // Remove the currency symbol for cleaner look in tables
+    return formatted.replace('Rp', 'Rp ')
+  }
+
+  // Helper function to format currency for table display (compact)
+  const formatCurrencyCompact = (amount: number) => {
+    if (amount >= 1000000000) {
+      const billions = (amount / 1000000000).toFixed(1)
+      return `Rp ${billions}B`
+    } else if (amount >= 1000000) {
+      const millions = (amount / 1000000).toFixed(1)
+      return `Rp ${millions}M`
+    } else if (amount >= 1000) {
+      const thousands = (amount / 1000).toFixed(0)
+      return `Rp ${thousands}K`
+    }
+    return formatCurrency(amount)
+  }
+
+  // Helper function to get short format for large numbers
+  const getShortFormat = (amount: number) => {
+    if (amount >= 1000000000) {
+      return `(≈${(amount / 1000000000).toFixed(1)}B)`
+    } else if (amount >= 1000000) {
+      return `(≈${(amount / 1000000).toFixed(1)}M)`
+    } else if (amount >= 1000) {
+      return `(≈${(amount / 1000).toFixed(0)}K)`
+    }
+    return ''
+  }
+
   // Helper function to add text with word wrap
   const addWrappedText = (text: string, x: number, y: number, maxWidth: number, lineHeight = 5) => {
     const lines = pdf.splitTextToSize(text, maxWidth)
     pdf.text(lines, x, y)
     return y + lines.length * lineHeight
+  }
+
+  // Helper function to check if we need a new page
+  const checkNewPage = (additionalHeight = 20) => {
+    if (yPosition + additionalHeight > pageHeight - 40) {
+      pdf.addPage()
+      yPosition = margin
+      return true
+    }
+    return false
   }
 
   // Set default font
@@ -101,51 +152,83 @@ export async function generateInvoicePDF(data: InvoiceData, total: number) {
 
   yPosition += 6
 
+  // Calculate available width for each section
+  const sectionWidth = (contentWidth / 2) - 5
+
   // FROM details
   pdf.setFontSize(10)
   pdf.setTextColor(0, 0, 0)
   pdf.setFont("helvetica", "bold")
-  pdf.text(data.fromName, margin, yPosition)
+  
+  // Handle long names with wrapping
+  const fromNameLines = pdf.splitTextToSize(data.fromName, sectionWidth)
+  pdf.text(fromNameLines, margin, yPosition)
+  let fromYOffset = fromNameLines.length * 4
 
   pdf.setFont("helvetica", "normal")
   pdf.setFontSize(9)
   pdf.setTextColor(60, 60, 60)
-  pdf.text(data.fromEmail, margin, yPosition + 5)
-  pdf.text(data.fromPhone, margin, yPosition + 10)
+  
+  // Email with proper wrapping
+  const fromEmailLines = pdf.splitTextToSize(data.fromEmail, sectionWidth)
+  pdf.text(fromEmailLines, margin, yPosition + fromYOffset)
+  fromYOffset += fromEmailLines.length * 4
+  
+  // Phone
+  pdf.text(data.fromPhone, margin, yPosition + fromYOffset)
+  fromYOffset += 4
 
-  const fromAddressLines = pdf.splitTextToSize(data.fromAddress, contentWidth / 2 - 10)
-  pdf.text(fromAddressLines, margin, yPosition + 15)
+  // Address with proper wrapping
+  const fromAddressLines = pdf.splitTextToSize(data.fromAddress, sectionWidth)
+  pdf.text(fromAddressLines, margin, yPosition + fromYOffset)
+  fromYOffset += fromAddressLines.length * 4
 
   // BILL TO details
   pdf.setFontSize(10)
   pdf.setTextColor(0, 0, 0)
   pdf.setFont("helvetica", "bold")
-  pdf.text(data.toName, margin + contentWidth / 2, yPosition)
+  
+  // Handle long names with wrapping
+  const toNameLines = pdf.splitTextToSize(data.toName, sectionWidth)
+  pdf.text(toNameLines, margin + contentWidth / 2, yPosition)
+  let toYOffset = toNameLines.length * 4
 
   pdf.setFont("helvetica", "normal")
   pdf.setFontSize(9)
   pdf.setTextColor(60, 60, 60)
-  pdf.text(data.toEmail, margin + contentWidth / 2, yPosition + 5)
-  pdf.text(data.toPhone, margin + contentWidth / 2, yPosition + 10)
+  
+  // Email with proper wrapping
+  const toEmailLines = pdf.splitTextToSize(data.toEmail, sectionWidth)
+  pdf.text(toEmailLines, margin + contentWidth / 2, yPosition + toYOffset)
+  toYOffset += toEmailLines.length * 4
+  
+  // Phone
+  pdf.text(data.toPhone, margin + contentWidth / 2, yPosition + toYOffset)
+  toYOffset += 4
 
-  const toAddressLines = pdf.splitTextToSize(data.toAddress, contentWidth / 2 - 10)
-  pdf.text(toAddressLines, margin + contentWidth / 2, yPosition + 15)
+  // Address with proper wrapping
+  const toAddressLines = pdf.splitTextToSize(data.toAddress, sectionWidth)
+  pdf.text(toAddressLines, margin + contentWidth / 2, yPosition + toYOffset)
+  toYOffset += toAddressLines.length * 4
 
-  yPosition += 40
+  // Use the maximum offset to ensure proper spacing
+  yPosition += Math.max(fromYOffset, toYOffset) + 10
 
   // Items table header
+  checkNewPage(30)
+  
   pdf.setFillColor(28, 57, 142) // Navy blue background
-  pdf.rect(margin, yPosition - 5, contentWidth, 8, "F")
+  pdf.rect(margin, yPosition - 5, contentWidth, 10, "F")
 
-  pdf.setFontSize(9)
+  pdf.setFontSize(10)
   pdf.setFont("helvetica", "bold")
   pdf.setTextColor(255, 255, 255) // White text on navy blue background
   pdf.text("Description", margin + 2, yPosition)
-  pdf.text("Qty", margin + contentWidth - 60, yPosition, { align: "right" })
-  pdf.text("Rate", margin + contentWidth - 35, yPosition, { align: "right" })
+  pdf.text("Qty", margin + contentWidth - 75, yPosition, { align: "center" })
+  pdf.text("Rate", margin + contentWidth - 45, yPosition, { align: "right" })
   pdf.text("Amount", margin + contentWidth - 2, yPosition, { align: "right" })
 
-  yPosition += 8
+  yPosition += 10
 
   // Items
   pdf.setFont("helvetica", "normal")
@@ -156,104 +239,175 @@ export async function generateInvoicePDF(data: InvoiceData, total: number) {
     const amount = item.quantity * item.rate
 
     // Check if we need a new page
-    if (yPosition > pageHeight - 60) {
-      pdf.addPage()
-      yPosition = margin
+    checkNewPage(25)
+
+    // Handle long descriptions with word wrap
+    const descriptionWidth = contentWidth - 80
+    const descriptionLines = pdf.splitTextToSize(item.description, descriptionWidth)
+    const lineHeight = 5
+    const itemHeight = Math.max(lineHeight * descriptionLines.length, 12)
+
+    // Description (with word wrap)
+    pdf.text(descriptionLines, margin + 2, yPosition)
+
+    // Quantity (center aligned)
+    pdf.setFontSize(9)
+    pdf.text(item.quantity.toString(), margin + contentWidth - 75, yPosition, { align: "center" })
+
+    // Rate - use compact format for very large numbers
+    let rateDisplay = item.rate >= 10000000 ? formatCurrencyCompact(item.rate) : formatCurrency(item.rate)
+    pdf.setFontSize(8)
+    pdf.text(rateDisplay, margin + contentWidth - 45, yPosition, { align: "right" })
+
+    // If using compact format, show full amount on next line
+    if (item.rate >= 10000000) {
+      pdf.setFontSize(6)
+      pdf.setTextColor(100, 100, 100)
+      pdf.text(formatCurrency(item.rate), margin + contentWidth - 45, yPosition + 4, { align: "right" })
+      pdf.setTextColor(60, 60, 60)
     }
 
-    pdf.text(item.description, margin + 2, yPosition)
-    pdf.text(item.quantity.toString(), margin + contentWidth - 60, yPosition, { align: "right" })
-    pdf.text(`IDR ${item.rate.toLocaleString("id-ID")}`, margin + contentWidth - 35, yPosition, { align: "right" })
-    pdf.text(`IDR ${amount.toLocaleString("id-ID")}`, margin + contentWidth - 2, yPosition, { align: "right" })
+    // Amount - use compact format for very large numbers
+    let amountDisplay = amount >= 10000000 ? formatCurrencyCompact(amount) : formatCurrency(amount)
+    
+    pdf.setFontSize(9)
+    pdf.setFont("helvetica", "bold")
+    pdf.setTextColor(28, 57, 142) // Navy blue for amount
+    pdf.text(amountDisplay, margin + contentWidth - 2, yPosition, { align: "right" })
+    
+    // If using compact format, show full amount on next line
+    if (amount >= 10000000) {
+      pdf.setFontSize(7)
+      pdf.setTextColor(100, 100, 100)
+      pdf.text(formatCurrency(amount), margin + contentWidth - 2, yPosition + 4, { align: "right" })
+    }
 
-    yPosition += 7
+    yPosition += itemHeight + 3
 
     // Draw separator line
     if (index < data.items.length - 1) {
       pdf.setDrawColor(220, 220, 220)
-      pdf.line(margin, yPosition - 2, pageWidth - margin, yPosition - 2)
+      pdf.line(margin, yPosition - 1, pageWidth - margin, yPosition - 1)
+      yPosition += 3
     }
+
+    // Reset font properties for next item
+    pdf.setFont("helvetica", "normal")
+    pdf.setFontSize(9)
+    pdf.setTextColor(60, 60, 60)
   })
 
   yPosition += 5
 
-  // Total
+  // Total section
+  checkNewPage(20)
+  
   pdf.setDrawColor(28, 57, 142) // Navy blue line
   pdf.setLineWidth(1)
-  pdf.line(margin + contentWidth - 65, yPosition, pageWidth - margin, yPosition)
+  pdf.line(margin + contentWidth - 80, yPosition, pageWidth - margin, yPosition)
 
   yPosition += 7
 
-  pdf.setFontSize(11)
+  // Total amount with better formatting for large numbers
+  let totalDisplay = total >= 100000000 ? formatCurrencyCompact(total) : formatCurrency(total)
+
+  pdf.setFontSize(14)
   pdf.setFont("helvetica", "bold")
   pdf.setTextColor(28, 57, 142) // Navy blue color for total
-  pdf.text("TOTAL", margin + contentWidth - 65, yPosition)
-  pdf.text(`IDR ${total.toLocaleString("id-ID")}`, pageWidth - margin, yPosition, { align: "right" })
+  pdf.text("TOTAL", margin + contentWidth - 80, yPosition)
+  
+  // Main total amount - use compact format for very large numbers
+  pdf.setFontSize(16)
+  pdf.text(totalDisplay, pageWidth - margin, yPosition, { align: "right" })
+  
+  // If using compact format, show full amount on next line in readable font
+  if (total >= 100000000) {
+    pdf.setFontSize(9)
+    pdf.setTextColor(100, 100, 100)
+    pdf.text(formatCurrency(total), pageWidth - margin, yPosition + 5, { align: "right" })
+  }
 
-  yPosition += 15
+  yPosition += 18
 
   // Payment Details
   if (data.bankName) {
     // Check if we need a new page
-    if (yPosition > pageHeight - 50) {
-      pdf.addPage()
-      yPosition = margin
-    }
+    checkNewPage(35)
 
     pdf.setFillColor(238, 242, 255) // Light navy blue background
-    pdf.roundedRect(margin, yPosition - 5, contentWidth, 25, 2, 2, "F")
+    pdf.roundedRect(margin, yPosition - 5, contentWidth, 30, 2, 2, "F")
 
-    pdf.setFontSize(10)
+    pdf.setFontSize(11)
     pdf.setFont("helvetica", "bold")
     pdf.setTextColor(28, 57, 142) // Navy blue color for header
     pdf.text("Payment Details", margin + 3, yPosition)
 
-    yPosition += 7
+    yPosition += 8
+
+    // Calculate column width
+    const colWidth = contentWidth / 3
 
     pdf.setFontSize(8)
     pdf.setFont("helvetica", "normal")
     pdf.setTextColor(100, 100, 100)
     pdf.text("Bank Name", margin + 3, yPosition)
-    pdf.text("Account Number", margin + contentWidth / 3 + 3, yPosition)
-    pdf.text("Account Name", margin + (2 * contentWidth) / 3 + 3, yPosition)
+    pdf.text("Account Number", margin + colWidth + 3, yPosition)
+    pdf.text("Account Name", margin + (2 * colWidth) + 3, yPosition)
 
-    yPosition += 5
+    yPosition += 6
 
     pdf.setFontSize(9)
     pdf.setFont("helvetica", "bold")
     pdf.setTextColor(0, 0, 0)
-    pdf.text(data.bankName, margin + 3, yPosition)
-    pdf.text(data.accountNumber, margin + contentWidth / 3 + 3, yPosition)
-    pdf.text(data.accountName, margin + (2 * contentWidth) / 3 + 3, yPosition)
+    
+    // Handle long bank names with wrapping
+    const bankNameLines = pdf.splitTextToSize(data.bankName, colWidth - 6)
+    pdf.text(bankNameLines, margin + 3, yPosition)
+    
+    // Account number (should fit in one line)
+    pdf.text(data.accountNumber, margin + colWidth + 3, yPosition)
+    
+    // Handle long account names with wrapping
+    const accountNameLines = pdf.splitTextToSize(data.accountName, colWidth - 6)
+    pdf.text(accountNameLines, margin + (2 * colWidth) + 3, yPosition)
 
-    yPosition += 15
+    // Calculate height needed for wrapped text
+    const maxLines = Math.max(bankNameLines.length, accountNameLines.length)
+    yPosition += (maxLines * 4) + 10
   }
 
   // Notes
   if (data.notes) {
     // Check if we need a new page
-    if (yPosition > pageHeight - 40) {
-      pdf.addPage()
-      yPosition = margin
-    }
+    checkNewPage(25)
 
     pdf.setDrawColor(200, 200, 200)
     pdf.line(margin, yPosition, pageWidth - margin, yPosition)
 
     yPosition += 8
 
-    pdf.setFontSize(10)
+    pdf.setFontSize(11)
     pdf.setFont("helvetica", "bold")
     pdf.setTextColor(28, 57, 142) // Navy blue color for notes header
     pdf.text("Notes", margin, yPosition)
 
-    yPosition += 6
+    yPosition += 7
 
     pdf.setFontSize(9)
     pdf.setFont("helvetica", "normal")
     pdf.setTextColor(60, 60, 60)
+    
+    // Handle long notes with proper wrapping and page breaks
     const notesLines = pdf.splitTextToSize(data.notes, contentWidth)
-    pdf.text(notesLines, margin, yPosition)
+    
+    // Process notes line by line to handle page breaks
+    notesLines.forEach((line: string, index: number) => {
+      checkNewPage(8)
+      pdf.text(line, margin, yPosition)
+      yPosition += 5
+    })
+
+    yPosition += 5
   }
 
   // Add copyright footer at the bottom of each page
