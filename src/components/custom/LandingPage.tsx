@@ -6,6 +6,7 @@ import { FileText, Download, Shield, Code, CheckCircle, Zap, Users, ArrowRight, 
 import { Navbar } from "@/components/custom/navigation/navbar"
 import { motion, useScroll, useTransform, useInView } from "framer-motion"
 import { useRef } from "react"
+import Iridescence from "../Iridescence"
 
 export default function LandingPage() {
     const heroRef = useRef(null)
@@ -25,14 +26,22 @@ export default function LandingPage() {
             <Navbar />
 
             {/* Hero Section */}
-            <section ref={heroRef} className="min-h-screen relative container mx-auto px-4 py-10">
+            <section ref={heroRef} className="min-h-screen mt-20 relative container mx-auto px-4 py-10">
                 {/* Background Elements - Animated */}
                 <motion.div
                     className="absolute inset-0 overflow-hidden pointer-events-none"
                     style={{ y, opacity }}
                 >
+                    <div className="absolute inset-0 flex items-center justify-center blur-lg dark:blur-md opacity-40 dark:opacity-30">
+                        <Iridescence
+                            color={[0.4, 0.8, 1]}
+                            mouseReact={true}
+                            amplitude={0.1}
+                            speed={0.8}
+                        />
+                    </div>
                     {/* Desktop only - reduced animations */}
-                    <div className="hidden md:block">
+                    {/* <div className="hidden md:block">
                         {[
                             { size: 'w-72 h-72', pos: 'top-1/6 left-1/6', color: 'bg-emerald-500/15 dark:bg-emerald-400/15', delay: 0 },
                             { size: 'w-80 h-80', pos: 'top-1/4 right-1/5', color: 'bg-rose-500/15 dark:bg-rose-400/15', delay: 0.2 },
@@ -53,10 +62,10 @@ export default function LandingPage() {
                                 }}
                             />
                         ))}
-                    </div>
+                    </div> */}
 
                     {/* Mobile only - ultra minimal effects */}
-                    <div className="md:hidden">
+                    {/* <div className="md:hidden">
                         <motion.div
                             className="absolute top-1/5 left-1 size-56 bg-blue-500/15 dark:bg-blue-400/15 rounded-full blur-xl"
                             initial={{ scale: 0, opacity: 0 }}
@@ -69,7 +78,7 @@ export default function LandingPage() {
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 1.5, delay: 0.8 }}
                         />
-                    </div>
+                    </div> */}
                 </motion.div>
 
                 <div className="relative max-w-6xl mx-auto">
@@ -79,18 +88,6 @@ export default function LandingPage() {
                         animate={heroInView ? { y: 0, opacity: 1 } : {}}
                         transition={{ duration: 1, ease: "easeOut" }}
                     >
-                        {/* Story Introduction */}
-                        <motion.div
-                            initial={{ y: 50, opacity: 0 }}
-                            animate={heroInView ? { y: 0, opacity: 1 } : {}}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                            className="mb-8"
-                        >
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-300 border border-blue-200 dark:border-blue-700">
-                                <Star className="w-4 h-4 mr-1" />
-                                Trusted by 10,000+ Tech Professionals
-                            </span>
-                        </motion.div>
 
                         {/* Main Headline with Staggered Animation */}
                         <motion.h1 className="text-5xl md:text-7xl font-bold mb-8 text-balance">
@@ -103,7 +100,7 @@ export default function LandingPage() {
                                 Invoic
                             </motion.span>
                             <motion.span
-                                className="text-gray-800 dark:text-gray-100 text-3xl md:text-5xl font-semibold"
+                                className="text-gray-800 dark:text-gray-100 text-3xl md:text-5xl leading-tight font-semibold"
                                 initial={{ y: 50, opacity: 0 }}
                                 animate={heroInView ? { y: 0, opacity: 1 } : {}}
                                 transition={{ duration: 0.8, delay: 0.6 }}
@@ -127,14 +124,13 @@ export default function LandingPage() {
                             animate={heroInView ? { y: 0, opacity: 1 } : {}}
                             transition={{ duration: 0.8, delay: 1 }}
                         >
-                            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-4 text-pretty max-w-4xl mx-auto leading-relaxed">
-                                Imagine never worrying about invoicing again. Create stunning, professional invoices for your tech services in seconds.
+                            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 text-pretty max-w-4xl mx-auto leading-relaxed">
+                                Create stunning, professional invoices for your tech services in seconds.
                             </p>
                             <p className="text-lg md:text-xl text-gray-500 dark:text-gray-400 mb-12 max-w-3xl mx-auto">
                                 <span className="text-blue-900 dark:text-blue-400 font-semibold">
-                                    No signup, no database, completely free. {" "}
+                                    No signup, no database, completely free.
                                 </span>
-                                Because your time should be spent building, not billing.
                             </p>
                         </motion.div>
 

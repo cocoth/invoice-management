@@ -51,7 +51,7 @@ export const Navbar = () => {
 
     return (
         <>
-            <header ref={navRef} className="border-b border-blue-900/10 dark:border-blue-300/20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+            <header ref={navRef} className="fixed w-full top-0 z-50 border-b border-blue-900/10 dark:border-blue-300/20 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm shadow-sm">
                 <nav aria-label="Main navigation">
                     <div className="container mx-auto px-4 py-2">
                         <div className="flex items-center justify-between h-16">
