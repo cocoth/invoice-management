@@ -79,6 +79,8 @@ export function ThemeToggle() {
         size="icon"
         onClick={toggleTheme}
         className="relative cursor-pointer overflow-hidden"
+        aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+        title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
       >
         <AnimatePresence mode="wait" initial={false}>
           {theme === "light" ? (
@@ -89,7 +91,7 @@ export function ThemeToggle() {
               exit={{ y: 20, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-              <Sun className="size-5" />
+              <Sun className="size-5" aria-hidden="true" />
             </motion.div>
           ) : (
             <motion.div
@@ -99,7 +101,7 @@ export function ThemeToggle() {
               exit={{ y: 20, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-              <Moon className="size-5" />
+              <Moon className="size-5" aria-hidden="true" />
             </motion.div>
           )}
         </AnimatePresence>

@@ -13,25 +13,23 @@ export default function HomePage() {
       <section className="min-h-screen relative container mx-auto px-4 py-16 md:py-24">
         {/* Background Elements - Simplified for mobile performance */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {/* Desktop only - full effects */}
+          {/* Desktop only - reduced animations */}
           <div className="hidden md:block">
-            <div className="absolute top-1/6 left-1/6 w-72 h-72 bg-emerald-500/15 dark:bg-emerald-400/15 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute top-1/6 left-1/6 w-72 h-72 bg-emerald-500/15 dark:bg-emerald-400/15 rounded-full blur-3xl"></div>
             <div className="absolute top-1/4 right-1/5 w-80 h-80 bg-rose-500/15 dark:bg-rose-400/15 rounded-full blur-3xl"></div>
-            <div className="absolute top-1/2 right-1/6 w-64 h-64 bg-amber-500/15 dark:bg-amber-300/15 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute top-1/2 right-1/6 w-64 h-64 bg-amber-500/15 dark:bg-amber-300/15 rounded-full blur-3xl"></div>
             <div className="absolute top-3/5 left-1/4 w-96 h-96 bg-cyan-500/15 dark:bg-cyan-400/15 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-1/6 right-1/4 w-88 h-88 bg-violet-500/15 dark:bg-violet-400/15 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-1/6 right-1/4 w-88 h-88 bg-violet-500/15 dark:bg-violet-400/15 rounded-full blur-3xl"></div>
             <div className="absolute bottom-1/5 left-1/3 w-72 h-72 bg-teal-500/15 dark:bg-teal-400/15 rounded-full blur-3xl"></div>
             <div className="absolute top-3/4 right-1/3 w-60 h-60 bg-pink-500/15 dark:bg-pink-400/15 rounded-full blur-3xl"></div>
-            <div className="absolute top-1/3 left-1/5 w-68 h-68 bg-orange-500/15 dark:bg-orange-400/15 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute top-1/3 left-1/5 w-68 h-68 bg-orange-500/15 dark:bg-orange-400/15 rounded-full blur-3xl"></div>
             <div className="hidden dark:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-gradient-radial from-indigo-400/4 via-purple-400/2 to-transparent rounded-full blur-2xl"></div>
           </div>
           
-          {/* Mobile only - minimal effects */}
+          {/* Mobile only - ultra minimal effects */}
           <div className="md:hidden">
-            <div className="absolute top-0 left-1/7 size-72 bg-pink-500/15 dark:bg-pink-700/15 rounded-full blur-3xl"></div>
-            <div className="absolute top-2/6 left-1 size-48 bg-violet-500/20 dark:bg-violet-400/20 rounded-full blur-2xl"></div>
-            <div className="absolute top-2/6 right-1 size-52 bg-indigo-500/20 dark:bg-indigo-400/20 rounded-full blur-2xl"></div>
-            <div className="absolute bottom-0 right-0 size-80 bg-orange-500/20 dark:bg-orange-400/15 rounded-full blur-2xl"></div>
+            <div className="absolute top-1/5 left-1 size-56 bg-blue-500/15 dark:bg-blue-400/15 rounded-full blur-xl"></div>
+            <div className="absolute bottom-1/5 right-1/6 size-32 bg-indigo-500/15 dark:bg-indigo-400/15 rounded-full blur-xl"></div>
           </div>
         </div>
 
@@ -57,25 +55,17 @@ export default function HomePage() {
               <span className="text-blue-900 dark:text-blue-400 font-semibold"> No signup, no database, completely free.</span>
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
-              <Link href="/invoice" className="group cursor-pointer">
+            {/* CTA Buttons - Mobile optimized */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 mb-12 md:mb-16">
+              <Link href="/invoice" className="group cursor-pointer w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto bg-blue-900 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105 cursor-pointer"
+                  className="w-full sm:w-auto bg-blue-900 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold rounded-lg md:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 md:group-hover:scale-105 cursor-pointer"
                 >
-                  <FileText className="mr-3 h-6 w-6" />
+                  <FileText className="mr-2 md:mr-3 h-5 md:h-6 w-5 md:w-6" />
                   Create Invoice Now
                 </Button>
               </Link>
-              {/* <Button
-                size="lg"
-                variant="outline"
-                className="w-full sm:w-auto border-2 border-blue-900 text-blue-900 hover:bg-blue-900 hover:text-white px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300"
-              >
-                <Download className="mr-3 h-6 w-6" />
-                View Demo
-              </Button> */}
             </div>
 
             <div className="flex flex-wrap justify-center gap-3 md:gap-4">
@@ -95,10 +85,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="container mx-auto px-4 py-20 bg-white/70 md:bg-white/50 dark:bg-slate-900/70 md:dark:bg-slate-900/50 md:backdrop-blur-sm relative">
+      {/* Features Section - Mobile optimized */}
+      <section id="features" className="container mx-auto px-4 py-16 md:py-20 bg-white dark:bg-slate-900 md:bg-white/70 md:dark:bg-slate-900/70 md:backdrop-blur-sm relative">
         {/* Dark mode radial overlay - desktop only */}
-        <div className="hidden dark:md:block absolute inset-0 bg-gradient-radial from-blue-950/20 via-transparent to-transparent pointer-events-none"></div>
+        <div className="hidden dark:lg:block absolute inset-0 bg-gradient-radial from-blue-950/10 via-transparent to-transparent pointer-events-none"></div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-800 dark:text-gray-100">
@@ -110,7 +100,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
             {[
               {
                 icon: FileText,
@@ -133,13 +123,13 @@ export default function HomePage() {
             ].map((feature, index) => (
               <Card
                 key={index}
-                className="p-6 md:p-8 hover:shadow-xl transition-all duration-300 md:hover:-translate-y-2 border-0 bg-white/90 md:bg-white/80 dark:bg-slate-700/80 md:dark:bg-slate-700/50 md:backdrop-blur-sm"
+                className="p-4 md:p-6 lg:p-8 transition-all duration-300 md:hover:shadow-xl md:hover:-translate-y-2 border-0 bg-white dark:bg-slate-800 md:bg-white/90 md:dark:bg-slate-700/80 md:backdrop-blur-sm"
               >
-                <div className={`h-16 w-16 rounded-2xl ${feature.color} flex items-center justify-center mb-6`}>
-                  <feature.icon className="h-8 w-8" />
+                <div className={`h-12 md:h-14 lg:h-16 w-12 md:w-14 lg:w-16 rounded-xl md:rounded-2xl ${feature.color} flex items-center justify-center mb-4 md:mb-6`}>
+                  <feature.icon className="h-6 md:h-7 lg:h-8 w-6 md:w-7 lg:w-8" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">{feature.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+                <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-gray-800 dark:text-gray-100">{feature.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
                   {feature.description}
                 </p>
               </Card>

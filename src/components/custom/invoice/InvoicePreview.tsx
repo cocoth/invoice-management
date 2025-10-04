@@ -69,8 +69,10 @@ export default function InvoicePreview({ data, onBack }: InvoicePreviewProps) {
         <div className="container mx-auto px-4 py-4 h-20">
           <div className="flex items-center justify-between h-full">
             <Button onClick={onBack} variant="ghost" size="sm" className="text-gray-600 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Edit
+              <ArrowLeft className="size-6 md:size-7" />
+              <span className="hidden md:block">
+                Back to Edit
+              </span>
             </Button>
             <div className="flex space-x-5">
               <ThemeToggle />

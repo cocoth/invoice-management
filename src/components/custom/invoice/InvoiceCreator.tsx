@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { ArrowLeft, Plus, Trash2, Download } from "lucide-react"
+import { ArrowLeft, Plus, Trash2, Download, Eye } from "lucide-react"
 import Link from "next/link"
 import InvoicePreview from "@/components/custom/invoice/InvoicePreview"
 import { ThemeToggle } from "../navigation/themeToggle"
@@ -119,15 +119,17 @@ export default function InvoiceCreator() {
       <div className="border-b border-blue-900/10 dark:border-blue-400/30 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-4 h-20">
           <div className="flex items-center justify-between h-full">
-            <Link href="/" className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-blue-200 hover:text-blue-900 dark:hover:text-blue-100 transition-colors cursor-pointer">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Home
+            <Link href="/" className="flex items-center justify-center gap-2 text-sm font-medium text-gray-600 dark:text-blue-200 hover:text-blue-900 dark:hover:text-blue-100 transition-colors cursor-pointer">
+              <ArrowLeft className="size-6 md:size-7" />
+              <span className="hidden md:block">
+                Back to Home
+              </span>
             </Link>
-            <div className="flex space-x-5">
-              <ThemeToggle/>
-              <Button onClick={handlePreview} className="bg-blue-900 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
-                <Download className="mr-2 h-4 w-4" />
-                Preview & Export
+            <div className="flex items-center space-x-2 md:space-x-5">
+              <ThemeToggle />
+              <Button onClick={handlePreview} className="bg-blue-900 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white px-3 py-2 md:px-6 md:py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer text-xs md:text-sm">
+                <Eye className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
+                <span>Preview</span>
               </Button>
             </div>
           </div>
@@ -148,7 +150,7 @@ export default function InvoiceCreator() {
             <h2 className="text-2xl font-bold mb-6 text-blue-900 dark:text-white">Invoice Details</h2>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="invoiceNumber" className="text-gray-700 dark:text-gray-300 dark:text-blue-200 font-medium">Invoice Number</Label>
+                <Label htmlFor="invoiceNumber" className="text-gray-700 dark:text-gray-300 font-medium">Invoice Number</Label>
                 <Input
                   id="invoiceNumber"
                   value={invoiceData.invoiceNumber}
@@ -158,7 +160,7 @@ export default function InvoiceCreator() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="invoiceDate" className="text-gray-700 dark:text-gray-300 dark:text-blue-200 font-medium">Invoice Date</Label>
+                <Label htmlFor="invoiceDate" className="text-gray-700 dark:text-gray-300 font-medium">Invoice Date</Label>
                 <Input
                   id="invoiceDate"
                   type="date"
@@ -168,7 +170,7 @@ export default function InvoiceCreator() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="dueDate" className="text-gray-700 dark:text-gray-300 dark:text-blue-200 font-medium">Due Date</Label>
+                <Label htmlFor="dueDate" className="text-gray-700 dark:text-gray-300 font-medium">Due Date</Label>
                 <Input
                   id="dueDate"
                   type="date"
@@ -421,8 +423,8 @@ export default function InvoiceCreator() {
               </Button>
             </Link>
             <Button onClick={handlePreview} size="lg" className="px-10 py-3 bg-blue-900 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-              <Download className="mr-3 h-5 w-5" />
-              Preview & Export PDF
+              <Eye className="mr-3 h-5 w-5" />
+              Preview
             </Button>
           </div>
         </div>
