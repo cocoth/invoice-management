@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '../../ui/button'
 import { ThemeToggle } from './themeToggle'
 
-const Navbar = () => {
+export const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const navRef = useRef<HTMLElement>(null)
 
@@ -52,8 +52,8 @@ const Navbar = () => {
     return (
         <>
             <header ref={navRef} className="border-b border-blue-900/10 dark:border-blue-300/20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
-                <nav role="navigation" aria-label="Main navigation">
-                    <div className="container mx-auto px-4 py-4">
+                <nav aria-label="Main navigation">
+                    <div className="container mx-auto px-4 py-2">
                         <div className="flex items-center justify-between h-16">
                             {/* Logo */}
                             <Link 
@@ -69,11 +69,10 @@ const Navbar = () => {
                             </Link>
 
                             {/* Desktop Navigation */}
-                            <div className="hidden lg:flex items-center gap-8" role="menubar">
+                            <div className="hidden lg:flex items-center gap-8">
                                 <Link 
                                     href="#features" 
                                     className="text-sm font-medium text-gray-600 hover:text-blue-900 dark:text-gray-200 dark:hover:text-blue-300 transition-colors cursor-pointer"
-                                    role="menuitem"
                                     aria-label="Features section"
                                 >
                                     Features
@@ -81,7 +80,6 @@ const Navbar = () => {
                                 <Link 
                                     href="#about" 
                                     className="text-sm font-medium text-gray-600 hover:text-blue-900 dark:text-gray-200 dark:hover:text-blue-300 transition-colors cursor-pointer"
-                                    role="menuitem"
                                     aria-label="About section"
                                 >
                                     About
@@ -134,7 +132,6 @@ const Navbar = () => {
                             opacity: { duration: 0.2 }
                         }}
                         className="lg:hidden fixed w-full top-[5rem] z-40 bg-white/40 dark:bg-slate-900/40 backdrop-blur-sm border-b border-blue-900/10 dark:border-blue-300/20 shadow-lg overflow-hidden"
-                        role="menu"
                         aria-label="Mobile navigation menu"
                     >
                         <motion.div
@@ -149,7 +146,6 @@ const Navbar = () => {
                                     href="/#features" 
                                     className="text-sm font-medium text-gray-600 hover:text-blue-900 dark:text-gray-200 dark:hover:text-blue-300 transition-colors cursor-pointer py-2 px-2 rounded-md hover:bg-blue-50 dark:hover:bg-slate-800"
                                     onClick={closeMenu}
-                                    role="menuitem"
                                     aria-label="Features section"
                                 >
                                     Features
@@ -158,7 +154,7 @@ const Navbar = () => {
                                     href="/#about" 
                                     className="text-sm font-medium text-gray-600 hover:text-blue-900 dark:text-gray-200 dark:hover:text-blue-300 transition-colors cursor-pointer py-2 px-2 rounded-md hover:bg-blue-50 dark:hover:bg-slate-800"
                                     onClick={closeMenu}
-                                    role="menuitem"
+                                
                                     aria-label="About section"
                                 >
                                     About
@@ -168,7 +164,6 @@ const Navbar = () => {
                                         href="/invoice" 
                                         className="cursor-pointer" 
                                         onClick={closeMenu}
-                                        role="menuitem"
                                         aria-label="Create new invoice"
                                     >
                                         <Button className="w-full bg-blue-900 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer">
@@ -184,5 +179,3 @@ const Navbar = () => {
         </>
     )
 }
-
-export default Navbar

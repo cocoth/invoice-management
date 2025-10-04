@@ -1,44 +1,18 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { ArrowLeft, Download, FileText } from "lucide-react"
+import { FileText } from "lucide-react"
 import { useState } from "react"
 import { generateInvoicePDF } from "@/lib/pdfGenerator"
-import { ThemeToggle } from "../navigation/themeToggle"
+import { InnerNavbar } from "../navigation/innerNavbar"
+import { InvoiceData } from "@/types/index.type"
 
-interface InvoiceItem {
-  id: string
-  description: string
-  quantity: number
-  rate: number
-}
-
-interface InvoiceData {
-  invoiceNumber: string
-  invoiceDate: string
-  dueDate: string
-  fromName: string
-  fromEmail: string
-  fromPhone: string
-  fromAddress: string
-  toName: string
-  toEmail: string
-  toPhone: string
-  toAddress: string
-  items: InvoiceItem[]
-  notes: string
-  bankName: string
-  accountNumber: string
-  accountName: string
-}
 
 interface InvoicePreviewProps {
   data: InvoiceData
-  onBack: () => void
 }
 
-export default function InvoicePreview({ data, onBack }: InvoicePreviewProps) {
+export default function InvoicePreview({ data }: InvoicePreviewProps) {
   const [isGenerating, setIsGenerating] = useState(false)
 
   const calculateSubtotal = () => {
@@ -65,25 +39,13 @@ export default function InvoicePreview({ data, onBack }: InvoicePreviewProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-blue-950 dark:to-indigo-950">
       {/* Header */}
-      <div className="border-b border-blue-900/10 dark:border-blue-300/20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 py-4 h-20">
-          <div className="flex items-center justify-between h-full">
-            <Button onClick={onBack} variant="ghost" size="sm" className="text-gray-600 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer">
-              <ArrowLeft className="size-6 md:size-7" />
-              <span className="hidden md:block">
-                Back to Edit
-              </span>
-            </Button>
-            <div className="flex space-x-5">
-              <ThemeToggle />
-              <Button onClick={handleExportPDF} disabled={isGenerating} className="bg-blue-900 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
-                <Download className="mr-2 h-4 w-4" />
-                {isGenerating ? "Generating PDF..." : "Export to PDF"}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <InnerNavbar
+        backTitle="Edit"
+        backHref="/invoice"
+        next={handleExportPDF}
+        title={isGenerating ? "Generating..." : "Export"}
+        icon={<FileText className="mr-1 md:mr-2 h-4 w-4 md:h-5 md:w-5" />}
+      />
 
       {/* Invoice Preview */}
       <div className="container mx-auto px-4 py-8 max-w-4xl">
