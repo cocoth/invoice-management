@@ -21,6 +21,9 @@ export default function InvoiceCreator() {
   } = useInvoice()
 
   const router = useRouter()
+  
+  // State untuk menyimpan nilai input quantity yang sedang diedit
+  const [quantityInputs, setQuantityInputs] = useState<Record<string, string>>({})
 
   // Optimized update function dengan useCallback
   const updateInvoiceData = useCallback((updates: Partial<InvoiceData>) => {
@@ -32,16 +35,28 @@ export default function InvoiceCreator() {
 
   // Optimized functions
   const addItem = useCallback(() => {
+    const newItemId = Date.now().toString();
     updateInvoiceData({
-      items: [...invoiceData.items, { id: Date.now().toString(), description: "", quantity: 1, rate: 0 }]
-    })
+      items: [...invoiceData.items, { id: newItemId, description: "", quantity: 1, rate: 0 }]
+    });
+    // Inisialisasi state lokal untuk item baru
+    setQuantityInputs(prev => ({
+      ...prev,
+      [newItemId]: "1"
+    }));
   }, [invoiceData.items, updateInvoiceData])
 
   const removeItem = useCallback((id: string) => {
     if (invoiceData.items.length > 1) {
       updateInvoiceData({
         items: invoiceData.items.filter((item) => item.id !== id)
-      })
+      });
+      // Bersihkan state lokal untuk item yang dihapus
+      setQuantityInputs(prev => {
+        const newState = { ...prev };
+        delete newState[id];
+        return newState;
+      });
     }
   }, [invoiceData.items, updateInvoiceData])
 
@@ -214,11 +229,11 @@ export default function InvoiceCreator() {
           </Card>
 
           {/* Items/Services */}
-          <Card className="p-4 md:p-8 max-h-[80dvh] md:max-h-[85dvh] bg-white dark:bg-gray-800 md:bg-white/90 md:dark:bg-gray-800/90 md:backdrop-blur-sm border-blue-900/10 dark:border-blue-400/30 shadow-sm md:shadow-lg md:hover:shadow-xl md:dark:shadow-blue-500/20 transition-shadow duration-200">
+          <Card className="p-4 md:p-8 max-h-[80vh] md:max-h-[85vh] bg-white dark:bg-gray-800 md:bg-white/90 md:dark:bg-gray-800/90 md:backdrop-blur-sm border-blue-900/10 dark:border-blue-400/30 shadow-sm md:shadow-lg md:hover:shadow-xl md:dark:shadow-blue-500/20 transition-shadow duration-200">
             <div className="mb-4 md:mb-6">
               <h2 className="text-xl md:text-2xl font-bold text-blue-900 dark:text-white">Services / Items</h2>
             </div>
-            <div className="space-y-4 md:space-y-6 max-h-[60vh] md:max-h-[70vh] overflow-y-auto pr-1 md:pr-2 py-2 md:py-3">
+            <div className="grid space-y-4 md:space-y-6 max-h-[60vh] md:max-h-[70vh] overflow-y-auto pr-1 md:pr-2 py-2">
               {invoiceData.items.map((item, index) => (
                 <div key={item.id} className="p-3 md:p-4 bg-gray-50 dark:bg-gray-700/60 rounded-lg border border-gray-200 dark:border-blue-400/40 relative hover:bg-gray-100 dark:hover:bg-gray-600/60 transition-colors">
                   <div className="grid md:grid-cols-[2fr,1fr,1fr,auto] gap-3 md:gap-4 items-end">
@@ -238,10 +253,30 @@ export default function InvoiceCreator() {
                         id={`qty-${item.id}`}
                         type="text"
                         inputMode="numeric"
-                        value={item.quantity === 1 ? "" : item.quantity.toString()}
+                        value={quantityInputs[item.id] ?? item.quantity.toString()}
                         onChange={(e) => {
                           const value = e.target.value.replace(/[^0-9]/g, "");
-                          updateItem(item.id, "quantity", Number.parseInt(value) || 1);
+                          
+                          // Update state lokal untuk tampilan
+                          setQuantityInputs(prev => ({
+                            ...prev,
+                            [item.id]: value
+                          }));
+                          
+                          // Update data dengan nilai yang valid (min 1)
+                          const numValue = value === "" ? 1 : (Number.parseInt(value) || 1);
+                          updateItem(item.id, "quantity", numValue);
+                        }}
+                        onBlur={() => {
+                          // Saat blur, pastikan ada nilai yang valid
+                          const currentInput = quantityInputs[item.id];
+                          if (!currentInput || currentInput === "") {
+                            setQuantityInputs(prev => ({
+                              ...prev,
+                              [item.id]: "1"
+                            }));
+                            updateItem(item.id, "quantity", 1);
+                          }
                         }}
                         placeholder="1"
                         className="border-gray-200 focus:border-blue-900 focus:ring-blue-900"

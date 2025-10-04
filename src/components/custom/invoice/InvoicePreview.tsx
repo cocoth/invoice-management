@@ -135,7 +135,7 @@ export default function InvoicePreview({ data }: InvoicePreviewProps) {
                     <div className="bg-blue-50 dark:bg-blue-900/20 px-4 py-3 border-b border-gray-200 dark:border-gray-700 rounded-t-lg">
                       <div className="flex justify-between items-center">
                         <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-900 dark:text-blue-100 px-2 py-1 rounded-full font-medium">
-                          Item #{index + 1}
+                          # {index + 1}
                         </span>
                       </div>
                     </div>

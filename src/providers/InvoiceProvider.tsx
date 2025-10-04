@@ -44,7 +44,12 @@ export const InvoiceProvider = ({ children }: { children: React.ReactNode }) => 
         toEmail: "",
         toPhone: "",
         toAddress: "",
-        items: [{ id: "1", description: "", quantity: 1, rate: 0 }],
+        items: [{
+            id: "1",
+            description: "",
+            quantity: 1,
+            rate: 0
+        }],
         notes: "",
         bankName: "",
         accountNumber: "",
