@@ -153,10 +153,10 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <FileText className="h-5 w-5 text-primary" />
-              <span className="font-semibold">InvoiceFlow</span>
+              <span className="font-semibold">Invoic</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2025 InvoiceFlow. Professional invoice management for tech services.
+              © 2025 Invoic. Professional invoice management for tech services.
             </p>
           </div>
         </div>

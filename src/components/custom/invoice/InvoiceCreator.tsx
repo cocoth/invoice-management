@@ -262,11 +262,15 @@ export default function InvoiceCreator() {
                     <div className="space-y-2">
                       <Label htmlFor={`qty-${item.id}`}>Quantity</Label>
                       <Input
-                        id={`qty-${item.id}`}
-                        type="number"
-                        min="1"
-                        value={item.quantity}
-                        onChange={(e) => updateItem(item.id, "quantity", Number.parseInt(e.target.value) || 1)}
+                      id={`qty-${item.id}`}
+                      type="text"
+                      inputMode="numeric"
+                      value={item.quantity === 1 ? "" : item.quantity.toString()}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/[^0-9]/g, "");
+                        updateItem(item.id, "quantity", Number.parseInt(value) || 1);
+                      }}
+                      placeholder="1"
                       />
                     </div>
                     <div className="space-y-2">

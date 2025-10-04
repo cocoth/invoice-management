@@ -11,7 +11,7 @@ const Navbar = () => {
                     <div className="flex items-center justify-between h-full">
                         <div className="flex items-center gap-2">
                             <FileText className="h-6 w-6 text-primary" />
-                            <span className="hidden lg:block text-xl font-semibold">InvoiceFlow</span>
+                            <span className="hidden lg:block text-xl font-semibold">Invoic</span>
                         </div>
                         <div className="flex items-center gap-6">
                             <Link href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
