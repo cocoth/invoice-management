@@ -6,13 +6,15 @@ import Navbar from "@/components/custom/navigation/navbar"
 
 export default function HomePage() {
   return (
-    <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:bg-gradient-radial dark:from-blue-950 dark:via-slate-900 dark:to-black">
+    <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-blue-950 dark:to-indigo-950">
       <Navbar />
 
       {/* Hero Section */}
       <section className="min-h-screen relative container mx-auto px-4 py-16 md:py-24">
-        {/* Background Elements */}
+        {/* Background Elements - Simplified for mobile performance */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Desktop only - full effects */}
+          <div className="hidden md:block">
             <div className="absolute top-1/6 left-1/6 w-72 h-72 bg-emerald-500/15 dark:bg-emerald-400/15 rounded-full blur-3xl animate-pulse"></div>
             <div className="absolute top-1/4 right-1/5 w-80 h-80 bg-rose-500/15 dark:bg-rose-400/15 rounded-full blur-3xl"></div>
             <div className="absolute top-1/2 right-1/6 w-64 h-64 bg-amber-500/15 dark:bg-amber-300/15 rounded-full blur-3xl animate-pulse"></div>
@@ -22,6 +24,15 @@ export default function HomePage() {
             <div className="absolute top-3/4 right-1/3 w-60 h-60 bg-pink-500/15 dark:bg-pink-400/15 rounded-full blur-3xl"></div>
             <div className="absolute top-1/3 left-1/5 w-68 h-68 bg-orange-500/15 dark:bg-orange-400/15 rounded-full blur-3xl animate-pulse"></div>
             <div className="hidden dark:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-gradient-radial from-indigo-400/4 via-purple-400/2 to-transparent rounded-full blur-2xl"></div>
+          </div>
+          
+          {/* Mobile only - minimal effects */}
+          <div className="md:hidden">
+            <div className="absolute top-0 left-1/7 size-72 bg-pink-500/15 dark:bg-pink-700/15 rounded-full blur-3xl"></div>
+            <div className="absolute top-2/6 left-1 size-48 bg-violet-500/20 dark:bg-violet-400/20 rounded-full blur-2xl"></div>
+            <div className="absolute top-2/6 right-1 size-52 bg-indigo-500/20 dark:bg-indigo-400/20 rounded-full blur-2xl"></div>
+            <div className="absolute bottom-0 right-0 size-80 bg-orange-500/20 dark:bg-orange-400/15 rounded-full blur-2xl"></div>
+          </div>
         </div>
 
         <div className="relative max-w-6xl mx-auto">
@@ -67,17 +78,16 @@ export default function HomePage() {
               </Button> */}
             </div>
 
-            {/* Features Pills */}
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-3 md:gap-4">
               {[
                 { icon: Zap, text: "Lightning Fast" },
                 { icon: Shield, text: "100% Secure" },
                 { icon: CheckCircle, text: "No Registration" },
                 { icon: Users, text: "Tech Focused" }
               ].map((feature, index) => (
-                <div key={index} className="flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-full border border-blue-900/10 dark:border-blue-400/20 shadow-sm">
+                <div key={index} className="flex items-center gap-2 px-3 md:px-4 py-2 bg-white/90 md:bg-white/80 dark:bg-slate-800/90 md:dark:bg-slate-800/80 md:backdrop-blur-sm rounded-full border border-blue-900/10 dark:border-blue-400/20 shadow-sm">
                   <feature.icon className="h-4 w-4 text-blue-900 dark:text-blue-400" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{feature.text}</span>
+                  <span className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-200">{feature.text}</span>
                 </div>
               ))}
             </div>
@@ -86,9 +96,9 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="container mx-auto px-4 py-20 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm relative">
-        {/* Dark mode radial overlay */}
-        <div className="hidden dark:block absolute inset-0 bg-gradient-radial from-blue-950/20 via-transparent to-transparent pointer-events-none"></div>
+      <section id="features" className="container mx-auto px-4 py-20 bg-white/70 md:bg-white/50 dark:bg-slate-900/70 md:dark:bg-slate-900/50 md:backdrop-blur-sm relative">
+        {/* Dark mode radial overlay - desktop only */}
+        <div className="hidden dark:md:block absolute inset-0 bg-gradient-radial from-blue-950/20 via-transparent to-transparent pointer-events-none"></div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-800 dark:text-gray-100">
@@ -123,7 +133,7 @@ export default function HomePage() {
             ].map((feature, index) => (
               <Card
                 key={index}
-                className="p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 bg-white/80 dark:bg-slate-700/50 backdrop-blur-sm"
+                className="p-6 md:p-8 hover:shadow-xl transition-all duration-300 md:hover:-translate-y-2 border-0 bg-white/90 md:bg-white/80 dark:bg-slate-700/80 md:dark:bg-slate-700/50 md:backdrop-blur-sm"
               >
                 <div className={`h-16 w-16 rounded-2xl ${feature.color} flex items-center justify-center mb-6`}>
                   <feature.icon className="h-8 w-8" />
@@ -165,7 +175,7 @@ export default function HomePage() {
                 features: ["Penetration Testing", "Security Audits", "Vulnerability Assessment", "Security Consulting"]
               }
             ].map((useCase, index) => (
-              <Card key={index} className="p-8 bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 transition-all duration-300">
+              <Card key={index} className="p-6 md:p-8 bg-white/20 md:bg-white/10 md:backdrop-blur-sm border-white/20 text-white hover:bg-white/30 md:hover:bg-white/20 transition-all duration-300">
                 <div className="flex items-start gap-6">
                   <div className="h-14 w-14 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
                     <useCase.icon className="h-7 w-7 text-white" />
