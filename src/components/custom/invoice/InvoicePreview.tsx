@@ -2,9 +2,10 @@
 
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { ArrowLeft, Download } from "lucide-react"
+import { ArrowLeft, Download, FileText } from "lucide-react"
 import { useState } from "react"
 import { generateInvoicePDF } from "@/lib/pdfGenerator"
+import { ThemeToggle } from "../navigation/themeToggle"
 
 interface InvoiceItem {
   id: string
@@ -62,58 +63,65 @@ export default function InvoicePreview({ data, onBack }: InvoicePreviewProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-blue-950 dark:to-indigo-950">
       {/* Header */}
-      <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <div className="border-b border-blue-900/10 dark:border-blue-300/20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-4 h-20">
           <div className="flex items-center justify-between h-full">
-            <Button onClick={onBack} variant="ghost" size="sm" className="cursor-pointer">
+            <Button onClick={onBack} variant="ghost" size="sm" className="text-gray-600 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Edit
             </Button>
-            <Button onClick={handleExportPDF} disabled={isGenerating} className="cursor-pointer">
-              <Download className="mr-2 h-4 w-4" />
-              {isGenerating ? "Generating PDF..." : "Export to PDF"}
-            </Button>
+            <div className="flex space-x-5">
+              <ThemeToggle />
+              <Button onClick={handleExportPDF} disabled={isGenerating} className="bg-blue-900 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
+                <Download className="mr-2 h-4 w-4" />
+                {isGenerating ? "Generating PDF..." : "Export to PDF"}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Invoice Preview */}
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <Card className="p-8 md:p-12 bg-white text-black" id="invoice-content">
+        <div className="mb-6 text-center">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">Invoice Preview</h1>
+          <p className="text-gray-600 dark:text-gray-300">Review your invoice before exporting to PDF</p>
+        </div>
+        <Card className="p-8 md:p-12 bg-white dark:bg-slate-800 text-black dark:text-white shadow-xl border-0 dark:border dark:border-slate-600" id="invoice-content">
           {/* Header */}
           <div className="flex justify-between items-start mb-8">
             <div>
-              <h1 className="text-3xl font-bold mb-2 text-black">INVOICE</h1>
-              <p className="text-gray-600">#{data.invoiceNumber}</p>
+              <h1 className="text-4xl font-bold mb-2 text-blue-900 dark:text-blue-400">INVOICE</h1>
+              <p className="text-gray-600 dark:text-gray-300 text-lg">#{data.invoiceNumber}</p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-600">Invoice Date</p>
-              <p className="font-medium text-black">{formatDate(data.invoiceDate)}</p>
-              <p className="text-sm text-gray-600 mt-2">Due Date</p>
-              <p className="font-medium text-black">{formatDate(data.dueDate)}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Invoice Date</p>
+              <p className="font-bold text-blue-900 dark:text-blue-400 text-lg">{formatDate(data.invoiceDate)}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-3 font-medium">Due Date</p>
+              <p className="font-bold text-blue-900 dark:text-blue-400 text-lg">{formatDate(data.dueDate)}</p>
             </div>
           </div>
 
           {/* From and To */}
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             <div>
-              <h3 className="text-sm font-semibold text-gray-600 mb-2">FROM</h3>
+              <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">FROM</h3>
               <div className="space-y-1">
-                <p className="font-semibold text-black">{data.fromName}</p>
-                <p className="text-sm text-gray-700">{data.fromEmail}</p>
-                <p className="text-sm text-gray-700">{data.fromPhone}</p>
-                <p className="text-sm text-gray-700">{data.fromAddress}</p>
+                <p className="font-semibold text-black dark:text-white">{data.fromName}</p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">{data.fromEmail}</p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">{data.fromPhone}</p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">{data.fromAddress}</p>
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-gray-600 mb-2">BILL TO</h3>
+              <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">BILL TO</h3>
               <div className="space-y-1">
-                <p className="font-semibold text-black">{data.toName}</p>
-                <p className="text-sm text-gray-700">{data.toEmail}</p>
-                <p className="text-sm text-gray-700">{data.toPhone}</p>
-                <p className="text-sm text-gray-700">{data.toAddress}</p>
+                <p className="font-semibold text-black dark:text-white">{data.toName}</p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">{data.toEmail}</p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">{data.toPhone}</p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">{data.toAddress}</p>
               </div>
             </div>
           </div>
@@ -122,20 +130,20 @@ export default function InvoicePreview({ data, onBack }: InvoicePreviewProps) {
           <div className="mb-8">
             <table className="w-full">
               <thead>
-                <tr className="border-b-2 border-gray-300">
-                  <th className="text-left py-3 font-semibold text-black">Description</th>
-                  <th className="text-right py-3 font-semibold text-black">Qty</th>
-                  <th className="text-right py-3 font-semibold text-black">Rate</th>
-                  <th className="text-right py-3 font-semibold text-black">Amount</th>
+                <tr className="border-b-2 border-gray-300 dark:border-gray-600 bg-blue-900 dark:bg-blue-700">
+                  <th className="text-left p-3 font-semibold text-white">Description</th>
+                  <th className="text-right p-3 font-semibold text-white">Qty</th>
+                  <th className="text-right p-3 font-semibold text-white">Rate</th>
+                  <th className="text-right p-3 font-semibold text-white">Amount</th>
                 </tr>
               </thead>
               <tbody>
                 {data.items.map((item) => (
-                  <tr key={item.id} className="border-b border-gray-200">
-                    <td className="py-3 text-gray-800">{item.description}</td>
-                    <td className="text-right py-3 text-gray-800">{item.quantity}</td>
-                    <td className="text-right py-3 text-gray-800">IDR {item.rate.toLocaleString("id-ID")}</td>
-                    <td className="text-right py-3 text-gray-800">
+                  <tr key={item.id} className="border-b border-gray-200 dark:border-gray-600">
+                    <td className="py-3 text-gray-800 dark:text-gray-200">{item.description}</td>
+                    <td className="text-right py-3 text-gray-800 dark:text-gray-200">{item.quantity}</td>
+                    <td className="text-right py-3 text-gray-800 dark:text-gray-200">IDR {item.rate.toLocaleString("id-ID")}</td>
+                    <td className="text-right py-3 text-gray-800 dark:text-gray-200">
                       IDR {(item.quantity * item.rate).toLocaleString("id-ID")}
                     </td>
                   </tr>
@@ -147,29 +155,29 @@ export default function InvoicePreview({ data, onBack }: InvoicePreviewProps) {
           {/* Total */}
           <div className="flex justify-end mb-8">
             <div className="w-64">
-              <div className="flex justify-between py-2 border-t-2 border-gray-300">
-                <span className="font-bold text-lg text-black">TOTAL</span>
-                <span className="font-bold text-lg text-black">IDR {calculateSubtotal().toLocaleString("id-ID")}</span>
+              <div className="flex justify-between py-2 border-t-2 border-gray-300 dark:border-gray-600">
+                <span className="font-bold text-lg text-black dark:text-white">TOTAL</span>
+                <span className="font-bold text-lg text-black dark:text-white">IDR {calculateSubtotal().toLocaleString("id-ID")}</span>
               </div>
             </div>
           </div>
 
           {/* Payment Details */}
           {data.bankName && (
-            <div className="mb-8 p-4 bg-gray-100 rounded-lg">
-              <h3 className="font-semibold mb-2 text-black">Payment Details</h3>
+            <div className="mb-8 p-4 bg-gray-100 dark:bg-slate-700 rounded-lg">
+              <h3 className="font-semibold mb-2 text-black dark:text-white">Payment Details</h3>
               <div className="grid grid-cols-3 gap-4 text-sm">
                 <div>
-                  <p className="text-gray-600">Bank Name</p>
-                  <p className="font-medium text-black">{data.bankName}</p>
+                  <p className="text-gray-600 dark:text-gray-400">Bank Name</p>
+                  <p className="font-medium text-black dark:text-white">{data.bankName}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600">Account Number</p>
-                  <p className="font-medium text-black">{data.accountNumber}</p>
+                  <p className="text-gray-600 dark:text-gray-400">Account Number</p>
+                  <p className="font-medium text-black dark:text-white">{data.accountNumber}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600">Account Name</p>
-                  <p className="font-medium text-black">{data.accountName}</p>
+                  <p className="text-gray-600 dark:text-gray-400">Account Name</p>
+                  <p className="font-medium text-black dark:text-white">{data.accountName}</p>
                 </div>
               </div>
             </div>
@@ -177,9 +185,9 @@ export default function InvoicePreview({ data, onBack }: InvoicePreviewProps) {
 
           {/* Notes */}
           {data.notes && (
-            <div className="border-t border-gray-300 pt-6">
-              <h3 className="font-semibold mb-2 text-black">Notes</h3>
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">{data.notes}</p>
+            <div className="border-t border-gray-300 dark:border-gray-600 pt-6">
+              <h3 className="font-semibold mb-2 text-black dark:text-white">Notes</h3>
+              <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{data.notes}</p>
             </div>
           )}
         </Card>
